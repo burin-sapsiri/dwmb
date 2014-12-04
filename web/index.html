@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RaspberryPI X-Box :: Home</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap-Switch -->
+    <link href="css/bootstrap-switch.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 70px;
+        background-color: lightgrey;
+      }
+
+      #frmDev0 {
+        height: 230px;
+        margin-top: 25px;
+        margin-bottom: 25px;
+      }
+
+      #frmDev1 {
+        height: 230px;
+        margin-top: 25px;
+        margin-bottom: 25px;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="row">
+        <div id="frmDev0" class="panel panel-default">
+          <div class="panel-heading" style="background-color: rgb(70, 98, 158); text-align: center;">
+            <h1 class="panel-title" style="color: #FFFFFF; font-size: 30px; font-weight: bold;">Device 0</h1>
+          </div>
+          <div class="panel-body" style="">
+            <a style="font-size: 20px;">Output 1 : </a><input type="checkbox" id="btn0_0" onChange="btn0_0_changed()"><br>
+            <a style="font-size: 20px;">Output 2 : </a><input type="checkbox" id="btn0_1" onChange="btn0_1_changed()"><br>  
+            <a style="font-size: 20px;">Output 3 : </a><input type="checkbox" id="btn0_2" onChange="btn0_2_changed()"><br>  
+            <a style="font-size: 20px;">Output 4 : </a><input type="checkbox" id="btn0_3" onChange="btn0_3_changed()"><br>  
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div id="frmDev1" class="panel panel-default">
+          <div class="panel-heading" style="background-color: rgb(70, 98, 158); text-align: center;">
+            <h1 class="panel-title" style="color: #FFFFFF; font-size: 30px; font-weight: bold;">Device 1</h1>
+          </div>
+          <div class="panel-body" style="">
+            <a style="font-size: 20px;">Output 1 : </a><input type="checkbox" id="btn1_0" onChange="btn1_0_changed()"><br>
+            <a style="font-size: 20px;">Output 2 : </a><input type="checkbox" id="btn1_1" onChange="btn1_1_changed()"><br>  
+            <a style="font-size: 20px;">Output 3 : </a><input type="checkbox" id="btn1_2" onChange="btn1_2_changed()"><br>  
+            <a style="font-size: 20px;">Output 4 : </a><input type="checkbox" id="btn1_3" onChange="btn1_3_changed()"><br>  
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap-switch.js"></script>
+    <script type="text/javascript">
+
+      var wsock = new WebSocket("ws://192.168.10.50:8888/mbnode");
+
+      function btn0_0_changed()
+      {
+        if ($('#btn0_0').is(":checked")) {
+          wsock.send("[0, 1]");
+        } else {
+          wsock.send("[0, 0]");
+        }
+      }
+
+      function btn0_1_changed()
+      {
+        if ($('#btn0_1').is(":checked")) {
+          wsock.send("[1, 1]");
+        } else {
+          wsock.send("[1, 0]");
+        }
+      }
+
+      function btn0_2_changed()
+      {
+        if ($('#btn0_2').is(":checked")) {
+          wsock.send("[2, 1]");
+        } else {
+          wsock.send("[2, 0]");
+        }
+      }
+
+      function btn0_3_changed()
+      {
+        if ($('#btn0_3').is(":checked")) {
+          wsock.send("[3, 1]");
+        } else {
+          wsock.send("[3, 0]");
+        }
+      }
+
+      function btn1_0_changed()
+      {
+        if ($('#btn1_0').is(":checked")) {
+          wsock.send("[4, 1]");
+        } else {
+          wsock.send("[4, 0]");
+        }
+      }
+
+      function btn1_1_changed()
+      {
+        if ($('#btn1_1').is(":checked")) {
+          wsock.send("[5, 1]");
+        } else {
+          wsock.send("[5, 0]");
+        }
+      }
+
+      function btn1_2_changed()
+      {
+        if ($('#btn1_2').is(":checked")) {
+          wsock.send("[6, 1]");
+        } else {
+          wsock.send("[6, 0]");
+        }
+      }
+
+      function btn1_3_changed()
+      {
+        if ($('#btn1_3').is(":checked")) {
+          wsock.send("[7, 1]");
+        } else {
+          wsock.send("[7, 0]");
+        }
+      }
+
+      $(document).ready(function () {
+
+        var btn0_0;
+        var btn0_1;
+        var btn0_2;
+        var btn0_3;
+
+        var btn1_0;
+        var btn1_1;
+        var btn1_2;
+        var btn1_3;
+
+        btn0_0 = $("#btn0_0").bootstrapSwitch();
+        btn0_1 = $("#btn0_1").bootstrapSwitch();
+        btn0_2 = $("#btn0_2").bootstrapSwitch();
+        btn0_3 = $("#btn0_3").bootstrapSwitch();
+
+        btn1_0 = $("#btn1_0").bootstrapSwitch();
+        btn1_1 = $("#btn1_1").bootstrapSwitch();
+        btn1_2 = $("#btn1_2").bootstrapSwitch();
+        btn1_3 = $("#btn1_3").bootstrapSwitch();
+
+
+        wsock.onopen = function(evt) {
+
+        }
+
+        wsock.onmessage = function(evt) {
+          var json_obj = eval ("(" + evt.data + ")");
+
+          if (json_obj[0] != $('#btn0_0').is(":checked")) {
+            if (json_obj[0]) {
+              btn0_0.bootstrapSwitch('state', true, true);
+            } else {
+              btn0_0.bootstrapSwitch('state', false, false);
+            }
+          }
+
+          if (json_obj[1] != $('#btn0_1').is(":checked")) {
+            if (json_obj[1]) {
+              btn0_1.bootstrapSwitch('state', true, true);
+            } else {
+              btn0_1.bootstrapSwitch('state', false, false);
+            }
+          }
+
+          if (json_obj[2] != $('#btn0_2').is(":checked")) {
+            if (json_obj[2]) {
+              btn0_2.bootstrapSwitch('state', true, true);
+            } else {
+              btn0_2.bootstrapSwitch('state', false, false);
+            }
+          }
+
+          if (json_obj[3] != $('#btn0_3').is(":checked")) {
+            if (json_obj[3]) {
+              btn0_3.bootstrapSwitch('state', true, true);
+            } else {
+              btn0_3.bootstrapSwitch('state', false, false);
+            }
+          }
+
+
+
+          if (json_obj[4] != $('#btn1_0').is(":checked")) {
+            if (json_obj[4]) {
+              btn1_0.bootstrapSwitch('state', true, true);
+            } else {
+              btn1_0.bootstrapSwitch('state', false, false);
+            }
+          }
+
+          if (json_obj[5] != $('#btn1_1').is(":checked")) {
+            if (json_obj[5]) {
+              btn1_1.bootstrapSwitch('state', true, true);
+            } else {
+              btn1_1.bootstrapSwitch('state', false, false);
+            }
+          }
+
+          if (json_obj[6] != $('#btn1_2').is(":checked")) {
+            if (json_obj[6]) {
+              btn1_2.bootstrapSwitch('state', true, true);
+            } else {
+              btn1_2.bootstrapSwitch('state', false, false);
+            }
+          }
+
+          if (json_obj[7] != $('#btn1_3').is(":checked")) {
+            if (json_obj[7]) {
+              btn1_3.bootstrapSwitch('state', true, true);
+            } else {
+              btn1_3.bootstrapSwitch('state', false, false);
+            }
+          }
+          
+        }
+
+        wsock.onclose = function(evt) {
+
+        }
+
+      });
+
+    </script>
+  </body>
+
+</html>
